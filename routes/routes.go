@@ -15,5 +15,7 @@ func RegisterRoutes(server *gin.Engine) {
 }
 
 func home(context *gin.Context) {
-	context.JSON(http.StatusOK, gin.H{"message": "Welcome home."})
+	context.HTML(http.StatusOK, "index.html", gin.H{
+		"content": "You have reached the homepage of the chat application...",
+	})
 }

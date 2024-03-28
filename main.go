@@ -16,6 +16,9 @@ func setupRouter() *gin.Engine {
 	// Default returns an engine instance with a logger & recovery middleware
 	server := gin.Default()
 
+	server.Static("/assets", "./assets")
+	server.LoadHTMLGlob("templates/*.html")
+
 	// Initialise the routes
 	routes.RegisterRoutes(server)
 
