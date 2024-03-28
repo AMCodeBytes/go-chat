@@ -1,12 +1,19 @@
 {{template "header.html"}}
-  <section class="section">
-    <div class="container">
-      <h1 class="title">
-        Hello World
-      </h1>
-      <p class="subtitle">
-        {{.content}}
-      </p>
-    </div>
+  <section class="hero is-fullheight">
+		<section class="section">
+			<div class="container">
+				<h1 class="title">
+					Go Chat
+				</h1>
+				<p class="subtitle">
+					{{.content}}
+				</p>
+				<p>
+					Welcome to the go chat web app. This web app will allow you to have a live chat with other users while using 
+					a websocket to send the content live to the clients. This web app also uses Bulma and Gin to provide the 
+					functionality and looks.
+				</p>
+			</div>
+		</section>
   </section>
 {{template "footer.html"}}
