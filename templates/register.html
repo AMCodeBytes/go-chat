@@ -1,0 +1,36 @@
+{{template "header.html"}}
+	<section class="hero is-fullheight">
+		<section class="section">
+			<div class="container">
+				<h1 class="title">
+					Sign up
+				</h1>
+				<p class="subtitle">
+					{{.content}}
+				</p>
+				<hr />
+				<div>
+					<form action="/register" method="post">
+						<div class="field">
+							<label class="label" for="username">Username</label>
+							<div class="control is-expanded">
+								<input id="username" class="input" name="username" type="text" placeholder="Message..." autocomplete="off" />
+							</div>
+						</div>
+						<div class="field">
+							<label class="label" for="password">Password</label>
+							<div class="control is-expanded">
+								<input id="password" class="input" name="password" type="password" placeholder="Message..." autocomplete="off" />
+							</div>
+						</div>
+						<div class="field">
+							<div class="control">
+								<button class="button is-link" type="submit">Sign up</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+	</section>
+{{template "footer.html"}}
