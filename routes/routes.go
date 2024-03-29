@@ -14,6 +14,9 @@ func RegisterRoutes(server *gin.Engine) {
 	// Sign up
 	server.GET("/register", register)
 
+	// Login
+	server.GET("/login", login)
+
 	server.GET("/ws", handlers.Chat)
 }
 
@@ -26,5 +29,11 @@ func home(context *gin.Context) {
 func register(context *gin.Context) {
 	context.HTML(http.StatusOK, "register.html", gin.H{
 		"content": "Please sign up to be able to chat.",
+	})
+}
+
+func login(context *gin.Context) {
+	context.HTML(http.StatusOK, "login.html", gin.H{
+		"content": "Please use your credentials to log in.",
 	})
 }
