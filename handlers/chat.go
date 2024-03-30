@@ -9,6 +9,23 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+type WsConnection struct {
+	*websocket.Conn
+}
+
+type WsResponse struct {
+	Action      string `json:"action"`
+	Message     string `json:"message"`
+	MessageType string `json:"message_type"`
+}
+
+type WsPayload struct {
+	Action   string       `json:"action"`
+	Username string       `json:"username"`
+	Message  string       `json:"message"`
+	Conn     WsConnection `json:"_"`
+}
+
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,

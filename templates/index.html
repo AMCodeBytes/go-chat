@@ -97,4 +97,27 @@
 			</div>
 		</section>
   </section>
+	<script>
+		let socket = null;
+
+		document.addEventListener("DOMContentLoaded", function() {
+			socket = new WebSocket("ws://localhost:8080/ws");
+
+			socket.onopen = () => {
+				console.log("successfully connected");
+			}
+
+			socket.onclose = () => {
+				console.log("Closed connection");
+			}
+
+			socket.onerror = error => {
+				console.log("Error");
+			}
+
+			socket.onmessage = message => {
+				console.log(message)
+			}
+		})
+	</script>
 {{template "footer.html"}}
