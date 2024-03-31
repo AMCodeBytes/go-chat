@@ -75,7 +75,33 @@ func getLoginPage(context *gin.Context) {
 }
 
 func login(context *gin.Context) {
-	context.HTML(http.StatusOK, "login.html", gin.H{
-		"content": "Please use your credentials to log in.",
-	})
+	var user models.User
+
+	err := context.ShouldBind(&user)
+
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse request data."})
+		return
+	}
+
+	user.ID, err = user.Login()
+
+	if err != nil {
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid credentials."})
+		return
+	}
+
+	if user.ID == "" {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Invalid credentials."})
+		return
+	}
+
+	token, err := utilities.GenerateToken(user.Username, user.ID)
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to generate token."})
+		return
+	}
+
+	context.HTML(http.StatusOK, "login.html", gin.H{"message": "User logged in!", "token": token})
 }
