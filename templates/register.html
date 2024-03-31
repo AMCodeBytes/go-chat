@@ -8,6 +8,12 @@
 				<p class="subtitle">
 					{{.content}}
 				</p>
+				{{if .message}}
+				<div class="notification is-link">
+					<button class="delete"></button>
+					{{.message}}
+				</div>
+				{{end}}
 				<hr />
 				<div>
 					<form action="/register" method="post">
