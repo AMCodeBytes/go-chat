@@ -18,7 +18,7 @@
 					<form action="/" method="post">
 						<section class="section is-small">
 							<div class="card">
-								<div class="card-content">
+								<div id="output" class="card-content">
 									<article class="media">
 										<div class="media-content">
 											<div class="content">
@@ -89,7 +89,7 @@
 						</div>
 						<div class="field">
 							<div class="control">
-								<button class="button is-link" type="submit">Send</button>
+								<button id="send" class="button is-link" type="submit">Send</button>
 							</div>
 						</div>
 					</form>
@@ -99,6 +99,16 @@
   </section>
 	<script>
 		let socket = null;
+		let output = document.getElementById("output");
+
+		window.onbeforeunload = function () {
+			let data = {};
+			
+			console.log("Leaving");
+
+			data["action"] = "left";
+			socket.send(JSON.stringify(data))
+		}
 
 		document.addEventListener("DOMContentLoaded", function() {
 			socket = new WebSocket("ws://localhost:8080/ws");
@@ -117,7 +127,71 @@
 
 			socket.onmessage = message => {
 				console.log(message)
+
+				let data = JSON.parse(message.data);
+				console.log("Action is", data.action);
+
+				switch (data.action) {
+					case "list_users":
+						let ul = document.getElementById("users");
+						while (ul.firstChild) {
+							ul.removeChild(ul.firstChild);
+						}
+
+						if (data.connected_users.length > 0) {
+							data.connected_users.forEach(function (item) {
+								let li = document.createElement("li");
+								li.appendChild(document.createTextNode(item));
+								ul.appendChild(li);
+							});
+						}
+						break;
+					case "broadcast":
+						output.innerHTML = output.innerHTML + data.message + "<br>";
+						break;
+				}
 			}
+
+			document.getElementById("message").addEventListener("keydown", function(event) {
+				if (event.code === "Enter") {
+					if (!socket) {
+						console.log("no connection");
+						return false;
+					}
+
+					if (document.getElementById("message").value === "") {
+						console.log("no message")
+						return false
+					}
+
+					event.preventDefault();
+					event.stopPropagation();
+
+					sendMessage();
+				}
+			});
+
+			document.getElementById("send").addEventListener("click", function() {
+				if (document.getElementById("message").value === "") {
+					console.log("no message")
+					return false
+				}
+
+				sendMessage();
+			})
 		})
+
+		function sendMessage() {
+			let data = {};
+
+			data["action"] = "broadcast";
+			data["username"] = "Andrew";
+			data["message"] = document.getElementById("message");
+
+			socket.send(JSON.stringify(data));
+
+			document.getElementById("message").value = "";
+		}
+
 	</script>
 {{template "footer.html"}}
