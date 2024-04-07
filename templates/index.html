@@ -126,6 +126,7 @@
 			}
 
 			socket.onmessage = message => {
+				console.log("Message received")
 				console.log(message)
 
 				let data = JSON.parse(message.data);
@@ -156,12 +157,16 @@
 				if (event.code === "Enter") {
 					if (!socket) {
 						console.log("no connection");
+						event.preventDefault();
+						event.stopPropagation();
 						return false;
 					}
 
 					if (document.getElementById("message").value === "") {
 						console.log("no message")
-						return false
+						event.preventDefault();
+						event.stopPropagation();
+						return false;
 					}
 
 					event.preventDefault();
@@ -171,10 +176,13 @@
 				}
 			});
 
-			document.getElementById("send").addEventListener("click", function() {
+			document.getElementById("send").addEventListener("click", function(event) {
+				event.preventDefault();
+				event.stopPropagation();
+
 				if (document.getElementById("message").value === "") {
-					console.log("no message")
-					return false
+					console.log("no message");
+					return false;
 				}
 
 				sendMessage();
@@ -186,7 +194,9 @@
 
 			data["action"] = "broadcast";
 			data["username"] = "Andrew";
-			data["message"] = document.getElementById("message");
+			data["message"] = document.getElementById("message").value;
+
+			console.log(data)
 
 			socket.send(JSON.stringify(data));
 

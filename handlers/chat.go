@@ -45,13 +45,14 @@ func Chat(context *gin.Context) {
 		return
 	}
 
-	defer ws.Close()
+	// defer ws.Close()
 
 	conn := WsConnection{Conn: ws}
 	clients[conn] = ""
 
 	// for {
-	// 	conn.WriteMessage(websocket.TextMessage, []byte("Hello world! This is a websocket connection"))
+	// conn.WriteMessage(websocket.TextMessage, []byte("Hello world! This is a websocket connection"))
+	// conn.WriteJSON()
 	// 	time.Sleep(time.Second)
 	// }
 
@@ -63,10 +64,13 @@ func ListenForWs(conn *WsConnection) {
 
 	for {
 		err := conn.ReadJSON(&payload)
+		fmt.Println(payload)
+
 		if err != nil {
 			// Do nothing
 		} else {
 			payload.Conn = *conn
+			fmt.Println(payload.Conn)
 			wsChan <- payload
 		}
 	}
@@ -75,8 +79,12 @@ func ListenForWs(conn *WsConnection) {
 func ListenToWsChannel() {
 	var response WsResponse
 
+	fmt.Println("chan")
+
 	for {
 		e := <-wsChan
+
+		fmt.Println(e.Message)
 
 		switch e.Action {
 		case "username":

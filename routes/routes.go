@@ -12,6 +12,7 @@ import (
 func RegisterRoutes(server *gin.Engine) {
 	// Home
 	server.GET("/", home)
+	server.POST("/", homeChat)
 
 	// Sign up
 	server.GET("/register", getRegisterPage)
@@ -25,6 +26,12 @@ func RegisterRoutes(server *gin.Engine) {
 }
 
 func home(context *gin.Context) {
+	context.HTML(http.StatusOK, "index.html", gin.H{
+		"content": "You have reached the homepage of the chat application...",
+	})
+}
+
+func homeChat(context *gin.Context) {
 	context.HTML(http.StatusOK, "index.html", gin.H{
 		"content": "You have reached the homepage of the chat application...",
 	})
