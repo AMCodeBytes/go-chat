@@ -34,6 +34,7 @@ type WsPayload struct {
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+	CheckOrigin:     func(r *http.Request) bool { return true },
 }
 
 func Chat(context *gin.Context) {
@@ -55,6 +56,12 @@ func Chat(context *gin.Context) {
 	// conn.WriteJSON()
 	// 	time.Sleep(time.Second)
 	// }
+
+	var response WsResponse
+	response.Action = "broadcast"
+	response.Message = "<strong>Andrew</strong>: Hello world this is a message sent from the server."
+
+	broadcastToAll(response)
 
 	go ListenForWs(&conn)
 }
@@ -109,6 +116,7 @@ func ListenToWsChannel() {
 }
 
 func broadcastToAll(response WsResponse) {
+	fmt.Println("Broadcast message to all.")
 	for client := range clients {
 		err := client.WriteJSON(response)
 
